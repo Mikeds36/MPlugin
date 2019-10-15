@@ -8,6 +8,7 @@ public final class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
+        // Hello, World!
         Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "Hello, World!");
     }
 
