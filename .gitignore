@@ -107,3 +107,6 @@ gradle-app.setting
 
 ### Gradle Patch ###
 **/build/
+
+### IntelliJ IDEA ###
+/.idea/
