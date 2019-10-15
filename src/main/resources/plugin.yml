@@ -1,0 +1,5 @@
+name: MPlugin
+version: @version@
+main: test.minecraft.mplugin.Main
+api-version: 1.13
+website: https://github.com/Mikeds36/MPlugin
