@@ -2,7 +2,7 @@ package test.minecraft.mplugin;
 
 import org.bukkit.*;
 import org.bukkit.plugin.java.JavaPlugin;
-import test.minecraft.mplugin.commands.HelloCmd;
+import test.minecraft.mplugin.commands.*;
 
 import java.util.Objects;
 
