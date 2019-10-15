@@ -2,6 +2,9 @@ package test.minecraft.mplugin;
 
 import org.bukkit.*;
 import org.bukkit.plugin.java.JavaPlugin;
+import test.minecraft.mplugin.commands.HelloCmd;
+
+import java.util.Objects;
 
 public final class Main extends JavaPlugin {
 
@@ -9,6 +12,7 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         // Hello, World!
+        Objects.requireNonNull(getCommand("hello")).setExecutor(new HelloCmd(this));
         Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "Hello, World!");
     }
 
