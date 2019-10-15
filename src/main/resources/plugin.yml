@@ -3,3 +3,9 @@ version: @version@
 main: test.minecraft.mplugin.Main
 api-version: 1.13
 website: https://github.com/Mikeds36/MPlugin
+commands:
+  hello:
+    description: Hello, World! 문구를 출력합니다.
+    usage: |
+      /<command>
+      Example: /<command> - Hello, World 문구 출력
