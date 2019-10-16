@@ -24,25 +24,25 @@ public class GamemodeCmd implements CommandExecutor {
 
         if (sender.isOp()) {
             Player player = (Player) sender;
-            switch (args[1]) {
+            switch (args[0]) {
                 case "0":
                     player.setGameMode(GameMode.SURVIVAL);
-                    sender.sendMessage(String.format("Your gamemode is Changed to Survival", ChatColor.GREEN));
+                    sender.sendMessage(ChatColor.GREEN + "Your gamemode is Changed to SURVIVAL");
                     break;
                 case "1":
                     player.setGameMode(GameMode.CREATIVE);
-                    sender.sendMessage(String.format("Your gamemode is Changed to Creative", ChatColor.GREEN));
+                    sender.sendMessage(ChatColor.GREEN + "Your gamemode is Changed to CREATIVE");
                     break;
                 case "2":
                     player.setGameMode(GameMode.SPECTATOR);
-                    sender.sendMessage(String.format("Your gamemode is Changed to Spectator", ChatColor.GREEN));
+                    sender.sendMessage(ChatColor.GREEN + "Your gamemode is Changed to SPECTATOR");
                     break;
                 case "3":
                     player.setGameMode(GameMode.ADVENTURE);
-                    sender.sendMessage(String.format("Your gamemode is Changed to Adventure", ChatColor.GREEN));
+                    sender.sendMessage(ChatColor.GREEN + "Your gamemode is Changed to ADVENTURE");
                     break;
                 default:
-                    sender.sendMessage(String.format("Usage: /gm (0, 1, 2, 3)\n 0 : Survival\n 1 : Creative \n 2 : Spectator \n 3 : Adventure", ChatColor.RED));
+                    sender.sendMessage(ChatColor.RED + "Usage: /gm (0, 1, 2, 3)\n 0 : Survival\n 1 : Creative \n 2 : Spectator \n 3 : Adventure");
             }
         } else {
             sender.sendMessage("You don't have Permission");
