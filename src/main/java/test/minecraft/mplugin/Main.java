@@ -15,7 +15,7 @@ public final class Main extends JavaPlugin {
         // Plugin startup logic
         // Hello, World!
         Objects.requireNonNull(getCommand("hello")).setExecutor(new HelloCmd(this));
-        Objects.requireNonNull(getCommand("gm")).setExecutor(new GamemodeCmd(this));
+        Objects.requireNonNull(getCommand("gm")).setExecutor(new GamemodeCmd());
         Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "Hello, World!");
     }
 
