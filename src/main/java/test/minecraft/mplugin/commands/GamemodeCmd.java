@@ -7,14 +7,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import test.minecraft.mplugin.Main;
 
 public class GamemodeCmd implements CommandExecutor {
-    private final Main plugin;
-
-    public GamemodeCmd(Main plugin) {
-        this.plugin = plugin;
-    }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
