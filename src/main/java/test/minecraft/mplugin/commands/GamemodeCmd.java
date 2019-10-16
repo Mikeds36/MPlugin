@@ -28,12 +28,13 @@ public class GamemodeCmd implements CommandExecutor {
                     sender.sendMessage(ChatColor.GREEN + "Your gamemode is Changed to CREATIVE");
                     break;
                 case "2":
-                    player.setGameMode(GameMode.SPECTATOR);
-                    sender.sendMessage(ChatColor.GREEN + "Your gamemode is Changed to SPECTATOR");
-                    break;
-                case "3":
                     player.setGameMode(GameMode.ADVENTURE);
                     sender.sendMessage(ChatColor.GREEN + "Your gamemode is Changed to ADVENTURE");
+                    break;
+                case "3":
+                    player.setGameMode(GameMode.SPECTATOR);
+                    sender.sendMessage(ChatColor.GREEN + "Your gamemode is Changed to SPECTATOR");
+
                     break;
                 default:
                     sender.sendMessage(ChatColor.RED + "Usage: /gm (0, 1, 2, 3)\n 0 : Survival\n 1 : Creative \n 2 : Spectator \n 3 : Adventure");

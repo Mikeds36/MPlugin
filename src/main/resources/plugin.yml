@@ -16,5 +16,5 @@ commands:
       Example: /gm (0, 1, 2, 3) - Gamemode 변경
         0 : Survival
         1 : Creative
-        2 : Spectator
-        3 : Adventure
+        2 : Adventure
+        3 : Spectator
