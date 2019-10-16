@@ -9,3 +9,12 @@ commands:
     usage: |
       /<command>
       Example: /<command> - Hello, World 문구 출력
+  gm:
+    description: Gamemode를 변경합니다.
+    usage: |
+      /<command>
+      Example: /gm (0, 1, 2, 3) - Gamemode 변경
+        0 : Survival
+        1 : Creative
+        2 : Spectator
+        3 : Adventure
