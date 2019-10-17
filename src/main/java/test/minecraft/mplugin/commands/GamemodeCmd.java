@@ -6,9 +6,19 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.jetbrains.annotations.NotNull;
+import test.minecraft.mplugin.Main;
+
+import java.util.Objects;
 
 public class GamemodeCmd implements CommandExecutor {
+    private final Main plugin;
+    private final GameMode[] gm = GameMode.values();
+
+    public GamemodeCmd(Main plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
@@ -16,28 +26,20 @@ public class GamemodeCmd implements CommandExecutor {
             return false;
         }
 
+        PluginDescriptionFile pluginInfo = plugin.getDescription();
+
+        int UIGamemode = Integer.parseInt(args[0]);
+        GameMode uigm = gm[UIGamemode];
+
+        String Usage = (String) pluginInfo.getCommands().get("gm").get("usage");
+
         if (sender.isOp()) {
             Player player = (Player) sender;
-            switch (args[0]) {
-                case "0":
-                    player.setGameMode(GameMode.SURVIVAL);
-                    sender.sendMessage(ChatColor.GREEN + "Your gamemode is Changed to SURVIVAL");
-                    break;
-                case "1":
-                    player.setGameMode(GameMode.CREATIVE);
-                    sender.sendMessage(ChatColor.GREEN + "Your gamemode is Changed to CREATIVE");
-                    break;
-                case "2":
-                    player.setGameMode(GameMode.ADVENTURE);
-                    sender.sendMessage(ChatColor.GREEN + "Your gamemode is Changed to ADVENTURE");
-                    break;
-                case "3":
-                    player.setGameMode(GameMode.SPECTATOR);
-                    sender.sendMessage(ChatColor.GREEN + "Your gamemode is Changed to SPECTATOR");
-
-                    break;
-                default:
-                    sender.sendMessage(ChatColor.RED + "Usage: /gm (0, 1, 2, 3)\n 0 : Survival\n 1 : Creative \n 2 : Spectator \n 3 : Adventure");
+            if (UIGamemode < 4) {
+                player.setGameMode(uigm);
+                sender.sendMessage(ChatColor.GREEN + "Your gamemode is Changed to " + uigm.name());
+            } else {
+                sender.sendMessage(ChatColor.RED + Usage);
             }
         } else {
             sender.sendMessage("You don't have Permission");
