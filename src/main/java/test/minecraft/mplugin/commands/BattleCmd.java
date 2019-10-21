@@ -13,6 +13,22 @@ public class BattleCmd implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        return false;
+        String CommandIdentifier = args[0];
+
+        if (CommandIdentifier.equalsIgnoreCase("Init")) {
+            //Todo: Init Something
+        } else if (CommandIdentifier.equalsIgnoreCase("Team")) {
+            //Todo: Create Team, join team
+        } else if (CommandIdentifier.equalsIgnoreCase("Abli")) {
+            //Todo: Check players have team
+            //Todo: Give Ability each Team's player
+        } else if (CommandIdentifier.equalsIgnoreCase("Start")) {
+            //Todo: Get each team And tp each Team's player
+        } else {
+            //Todo return false;
+            return false;
+        }
+
+        return true;
     }
 }
