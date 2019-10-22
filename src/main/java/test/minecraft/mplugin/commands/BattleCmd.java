@@ -21,7 +21,7 @@ public class BattleCmd implements CommandExecutor {
         Player p = (Player) sender;
 
         if (CommandIdentifier.equalsIgnoreCase("Init")) {
-            new Init(this);
+            new Init(sender);
             //Todo: Init Something
         } else if (CommandIdentifier.equalsIgnoreCase("Team")) {
             //Todo: Create Team, join team

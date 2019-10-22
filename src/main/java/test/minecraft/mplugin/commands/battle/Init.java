@@ -4,17 +4,15 @@ import com.destroystokyo.paper.Title;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import test.minecraft.mplugin.commands.BattleCmd;
 
 public class Init {
-    private final BattleCmd s;
 
-    public Init(BattleCmd Sender) {
-        this.s = Sender;
-
-        Player p = (Player) s;
+    public Init(CommandSender Sender) {
+        Player p = (Player) Sender;
         World w = p.getWorld();
         WorldBorder wb = w.getWorldBorder();
 
