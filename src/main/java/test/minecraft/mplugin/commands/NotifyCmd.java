@@ -20,6 +20,7 @@ public class NotifyCmd implements CommandExecutor {
             return false;
         }
 
+        Player self = (Player) sender;
         Set<Player> players = new HashSet<>(Bukkit.getOnlinePlayers());
         Map<Player, Long> playerTime = new HashMap<>();
 
@@ -27,6 +28,8 @@ public class NotifyCmd implements CommandExecutor {
             playerTime.put(p, p.getPlayerTimeOffset());
         }
 
+        //print PlayerTime of sender
+        sender.sendMessage(ChatColor.GREEN + "Your PlayerTimeOffset : \n" + playerTime.get(self));
         return true;
     }
 }
