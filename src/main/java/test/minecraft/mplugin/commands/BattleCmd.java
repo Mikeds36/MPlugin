@@ -1,4 +1,6 @@
 package test.minecraft.mplugin.commands;
+
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import test.minecraft.mplugin.Main;
 import org.bukkit.*;
@@ -14,6 +16,8 @@ public class BattleCmd implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         String CommandIdentifier = args[0];
+
+        Player p = (Player) sender;
 
         if (CommandIdentifier.equalsIgnoreCase("Init")) {
             //Todo: Init Something
