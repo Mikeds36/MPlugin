@@ -18,3 +18,8 @@ commands:
         1 : Creative
         2 : Adventure
         3 : Spectator
+  notify:
+    description: 게임 플레이 시간을 알려줍니다.
+    usage: |
+      /<command> - Toggle
+      /<command> [on/off] - notify 기능 on/off
