@@ -24,7 +24,7 @@ public class Init {
         wb.setSize(60);
         wb.setSize(0, 100);
         Title.@NotNull Builder tb = new Title.Builder();
-        Title title = tb.title("Hello World").subtitle("this is subtitle").fadeIn(1).fadeOut(1).stay(3).build();
+        Title title = tb.subtitle("this is subtitle").title("Hello World").fadeIn(100).fadeOut(100).stay(2000).build();
         p.sendTitle(title);
     }
 }
