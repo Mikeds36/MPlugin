@@ -18,3 +18,7 @@ commands:
         1 : Creative
         2 : Adventure
         3 : Spectator
+  battle:
+    description: Start Battle
+    usage: |
+      /<command>

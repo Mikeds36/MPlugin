@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import test.minecraft.mplugin.Main;
 import org.bukkit.*;
 import org.bukkit.command.*;
+import test.minecraft.mplugin.commands.battle.*;
 
 public class BattleCmd implements CommandExecutor {
     private final Main plugin;
@@ -20,6 +21,7 @@ public class BattleCmd implements CommandExecutor {
         Player p = (Player) sender;
 
         if (CommandIdentifier.equalsIgnoreCase("Init")) {
+            new Init(this);
             //Todo: Init Something
         } else if (CommandIdentifier.equalsIgnoreCase("Team")) {
             //Todo: Create Team, join team
