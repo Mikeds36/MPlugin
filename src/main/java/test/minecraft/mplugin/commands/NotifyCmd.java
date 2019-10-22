@@ -9,25 +9,25 @@ import java.util.*;
 
 public class NotifyCmd implements CommandExecutor {
     private final Main plugin;
-    private Map<Player, Long> playerTime = new HashMap<>();
+    private Map<Player, Integer> playerTime = new HashMap<>();
 
     public NotifyCmd(Main plugin) {
         this.plugin = plugin;
     }
 
     //Test method
-    private void refreshTime() {
+    private void refreshPlayTime() {
         Set<Player> players = new HashSet<>(Bukkit.getOnlinePlayers());
         for (Player p : players) {
-            playerTime.put(p, p.getPlayerTimeOffset());
+            playerTime.put(p, p.getStatistic(Statistic.PLAY_ONE_MINUTE));
         }
     }
 
     //Test method
-    private String printTime(Player p) {
-        refreshTime();
+    private String printPlayTime(Player p) {
+        refreshPlayTime();
         //print PlayerTime of sender
-        return "Your PlayerTimeOffset : " + playerTime.get(p);
+        return "Your PlayerTime : " + playerTime.get(p);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class NotifyCmd implements CommandExecutor {
         }
 
         Player self = (Player) sender;
-        sender.sendMessage(ChatColor.GREEN + printTime(self));
+        sender.sendMessage(ChatColor.GREEN + printPlayTime(self));
         return true;
     }
 }
