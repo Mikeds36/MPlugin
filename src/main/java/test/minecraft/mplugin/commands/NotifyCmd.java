@@ -26,8 +26,8 @@ public class NotifyCmd implements CommandExecutor {
     //Test method
     private String printPlayTime(Player p) {
         refreshPlayTime();
-        //print PlayerTime of sender
-        return "Your PlayerTime : " + playerTime.get(p);
+        //print PlayTime of sender
+        return "Your PlayTime : " + playerTime.get(p);
     }
 
     @Override
