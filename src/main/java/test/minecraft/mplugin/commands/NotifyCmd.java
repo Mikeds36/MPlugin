@@ -9,7 +9,6 @@ import java.util.*;
 
 public class NotifyCmd implements CommandExecutor {
     private final Main plugin;
-    private Set<Player> players = new HashSet<>(Bukkit.getOnlinePlayers());
     private Map<Player, Long> playerTime = new HashMap<>();
 
     public NotifyCmd(Main plugin) {
@@ -18,6 +17,7 @@ public class NotifyCmd implements CommandExecutor {
 
     //Test method
     private void refreshTime() {
+        Set<Player> players = new HashSet<>(Bukkit.getOnlinePlayers());
         for (Player p : players) {
             playerTime.put(p, p.getPlayerTimeOffset());
         }
