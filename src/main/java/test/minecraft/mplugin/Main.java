@@ -5,7 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 import test.minecraft.mplugin.commands.GamemodeCmd;
 import test.minecraft.mplugin.commands.HelloCmd;
-import test.minecraft.mplugin.commands.NotifyCmd;
+import test.minecraft.mplugin.commands.notify.NotifyCmd;
 
 import java.util.Objects;
 
