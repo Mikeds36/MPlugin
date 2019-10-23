@@ -24,10 +24,13 @@ public class BattleCmd implements CommandExecutor {
         if (CommandIdentifier.equalsIgnoreCase("Init")) {
             new Init(sender);
             Title[] title = new TitleMaker().makeCountdown(3);
-            //TODO: 하드코딩을 해결할 방법 생각하기
-            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> p.sendTitle(title[0]), 0L);
-            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> p.sendTitle(title[1]), 20L);
-            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> p.sendTitle(title[2]), 40L);
+
+            //TODO: 역할 분리
+            for (int i = 0; i < title.length; i++) {
+                Title t = title[i];
+                long delay = (20 * i);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> p.sendTitle(t), delay);
+            }
 
             //Todo: Init Something
         } else if (CommandIdentifier.equalsIgnoreCase("Team")) {
