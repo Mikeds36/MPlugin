@@ -1,11 +1,12 @@
-package test.minecraft.mplugin.commands;
+package test.minecraft.mplugin.commands.battle;
 
+import com.destroystokyo.paper.Title;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import test.minecraft.mplugin.Main;
 import org.bukkit.*;
 import org.bukkit.command.*;
-import test.minecraft.mplugin.commands.battle.*;
+import test.minecraft.mplugin.core.TitleMaker;
 
 public class BattleCmd implements CommandExecutor {
     private final Main plugin;
@@ -22,6 +23,11 @@ public class BattleCmd implements CommandExecutor {
 
         if (CommandIdentifier.equalsIgnoreCase("Init")) {
             new Init(sender);
+            Title[] title = new TitleMaker().makeCountdown(3);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> p.sendTitle(title[0]), 0L);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> p.sendTitle(title[1]), 20L);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> p.sendTitle(title[2]), 40L);
+
             //Todo: Init Something
         } else if (CommandIdentifier.equalsIgnoreCase("Team")) {
             //Todo: Create Team, join team

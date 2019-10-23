@@ -3,7 +3,7 @@ package test.minecraft.mplugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
-import test.minecraft.mplugin.commands.BattleCmd;
+import test.minecraft.mplugin.commands.battle.BattleCmd;
 import test.minecraft.mplugin.commands.HelloCmd;
 
 import java.util.Objects;
