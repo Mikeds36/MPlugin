@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 import test.minecraft.mplugin.commands.GamemodeCmd;
 import test.minecraft.mplugin.commands.HelloCmd;
+import test.minecraft.mplugin.core.ConstructTabCompleter;
 
 import java.util.Objects;
 
@@ -16,6 +17,7 @@ public final class Main extends JavaPlugin {
         // Hello, World!
         Objects.requireNonNull(getCommand("hello")).setExecutor(new HelloCmd(this));
         Objects.requireNonNull(getCommand("gm")).setExecutor(new GamemodeCmd(this));
+        Objects.requireNonNull(getCommand("gm")).setTabCompleter(new ConstructTabCompleter.Gamemode());
         Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "Hello, World!");
     }
 
