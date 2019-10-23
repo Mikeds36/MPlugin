@@ -11,6 +11,8 @@ import test.minecraft.mplugin.core.TitleMaker;
 public class BattleCmd implements CommandExecutor {
     private final Main plugin;
 
+    private Init battleGame;
+
     public BattleCmd(Main plugin) {
         this.plugin = plugin;
     }
@@ -22,14 +24,11 @@ public class BattleCmd implements CommandExecutor {
         Player p = (Player) sender;
 
         if (CommandIdentifier.equalsIgnoreCase("Init")) {
-            new Init(sender);
-            Title[] title = new TitleMaker().makeCountdown(3);
-
-            //TODO: 역할 분리
-            for (int i = 0; i < title.length; i++) {
-                Title t = title[i];
-                long delay = (20 * i);
-                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> p.sendTitle(t), delay);
+            String detailCmd = args[1];
+            if (detailCmd.equalsIgnoreCase("setlo")) {
+                //Todo: Get Coordinate
+            } else {
+                battleGame = new Init(p.getWorld());
             }
 
             //Todo: Init Something
