@@ -65,7 +65,7 @@ public class BattleCmd implements CommandExecutor {
             //Todo: Check players have team
             //Todo: Give Ability each Team's player
         } else if (CommandIdentifier.equalsIgnoreCase("Start")) {
-            battleGame.Start();
+            battleGame.Start(p);
 
             //Todo: Get each team And tp each Team's player
         } else {

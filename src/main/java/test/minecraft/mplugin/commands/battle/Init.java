@@ -1,12 +1,15 @@
 package test.minecraft.mplugin.commands.battle;
 
 import com.destroystokyo.paper.Title;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.WorldBorder;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import test.minecraft.mplugin.Main;
 import test.minecraft.mplugin.core.TitleMaker;
 
@@ -51,20 +54,44 @@ class Init {
     }
 
     // Method
+    void Start(Player p) {
+        ItemStack is = new ItemStack(Material.STICK, 1);
+        ItemMeta im = is.getItemMeta();
+        Collection<PotionEffect> pes = new ArrayList<>();
+        PotionEffect pe = new PotionEffect(PotionEffectType.HEAL, 2, 127, false, false, true);
+        PotionEffect pe1 = new PotionEffect(PotionEffectType.SATURATION, 2, 127, false, false, true);
 
-    void Start() {
+        im.addEnchant(Enchantment.KNOCKBACK, 1, true);
+        im.setDisplayName("이야야야야야");
+        is.setItemMeta(im);
+
+        pes.add(pe);
+        pes.add(pe1);
         Title[] title = new TitleMaker().makeCountdown(3);
 
         for (Player pl : plugin.getServer().getOnlinePlayers()) {
+            Location l = pl.getLocation();
             for (int i = 0; i < title.length; i++) {
                 Title t = title[i];
                 long delay = (20 * i);
+                Sound s = Sound.BLOCK_NOTE_BLOCK_PLING;
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> pl.playSound(l, s, 1, 1), delay);
                 Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> pl.sendTitle(t), delay);
             }
 
+            // user setting
             pl.teleport(center);
+            pl.getInventory().clear();
+            pl.setGameMode(GameMode.ADVENTURE);
+            pl.getInventory().setItemInMainHand(is);
+            pl.addPotionEffects(pes);
+            pl.playSound(l, Sound.MUSIC_DISC_WARD, 1, 1);
+            // TODO: Add bossbar
         }
 
+        if (center.getWorld() == null) {
+            center.setWorld(p.getWorld());
+        }
         // WorldBorder Setting
         wb.setCenter(center);
         wb.setSize(wbSize);
