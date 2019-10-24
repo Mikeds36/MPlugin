@@ -11,6 +11,7 @@ import test.minecraft.mplugin.Main;
 import test.minecraft.mplugin.core.TitleMaker;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 class Init {
     private Main plugin;
@@ -30,8 +31,6 @@ class Init {
     private int wbSize = defaultSize;
     private int wbSecond = defaultSecond;
 
-    private ArrayList<Player> playerList;
-
     Init() {
     }
 
@@ -40,7 +39,7 @@ class Init {
         center.setWorld(world);
     }
 
-    void setCoord(int xpos, int ypos, int zpos) {
+    void setCoord(double xpos, double ypos, double zpos) {
         center.setX(xpos);
         center.setY(ypos);
         center.setZ(zpos);
@@ -52,21 +51,11 @@ class Init {
     }
 
     // Method
-    void Join(Player p) {
-        this.playerList.add(p);
-    }
 
-    void Start(CommandSender s) {
-        Player p = (Player) s;
-
-        if (!playerList.contains(p)) {
-            this.playerList.add(p);
-        }
-
+    void Start() {
         Title[] title = new TitleMaker().makeCountdown(3);
 
-        // Send Title, Player Teleport
-        for (Player pl : playerList) {
+        for (Player pl : plugin.getServer().getOnlinePlayers()) {
             for (int i = 0; i < title.length; i++) {
                 Title t = title[i];
                 long delay = (20 * i);
