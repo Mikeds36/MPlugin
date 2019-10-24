@@ -13,10 +13,11 @@ import java.text.ParseException;
 public class BattleCmd implements CommandExecutor {
     private final Main plugin;
 
-    private Init battleGame = new Init();
+    private Init battleGame;
 
     public BattleCmd(Main plugin) {
         this.plugin = plugin;
+        this.battleGame = new Init(plugin);
     }
 
     @Override

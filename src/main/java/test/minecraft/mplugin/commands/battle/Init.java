@@ -34,7 +34,8 @@ class Init {
     private int wbSize = defaultSize;
     private int wbSecond = defaultSecond;
 
-    Init() {
+    Init(Main p) {
+        this.plugin = p;
     }
 
     // Setter
