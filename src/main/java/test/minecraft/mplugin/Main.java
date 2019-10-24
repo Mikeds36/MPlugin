@@ -10,6 +10,7 @@ import test.minecraft.mplugin.commands.notify.NotifyCmd;
 import test.minecraft.mplugin.core.GameEventListener;
 import test.minecraft.mplugin.core.PlayTimeManager;
 import test.minecraft.mplugin.core.ConstructTabCompleter;
+import test.minecraft.mplugin.core.TaskManager;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -21,20 +22,18 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         // Hello, World!
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
-            PlayTimeManager playTime = PlayTimeManager.getInstance();
-            Set<Player> players = new HashSet<>(Bukkit.getOnlinePlayers());
-            for (Player p : players) {
-                p.sendMessage(playTime.print(p)); //debug
-            }
-        }, 0L, 1200L);
+        TaskManager taskMgr = TaskManager.getInstance();
+
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, taskMgr.get("notify_refresh"), 0L, 1200L);
 
         getServer().getPluginManager().registerEvents(new GameEventListener.PlayerJoin(this), this);
         Objects.requireNonNull(getCommand("hello")).setExecutor(new HelloCmd(this));
         Objects.requireNonNull(getCommand("gm")).setExecutor(new GamemodeCmd(this));
         Objects.requireNonNull(getCommand("gm")).setTabCompleter(new ConstructTabCompleter.Gamemode());
         Objects.requireNonNull(getCommand("notify")).setExecutor(new NotifyCmd(this));
-        Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "Hello, World!");
+        Objects.requireNonNull(getCommand("notifyall")).setExecutor(new NotifyCmd.BroadcastAll());
+
+        Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "[" + this.getName() + "] " + "Version " + this.getDescription().getVersion());
     }
 
     @Override

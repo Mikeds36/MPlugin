@@ -27,7 +27,7 @@ public class PlayTimeManager {
     private Map<Player, Integer> joinTime = new HashMap<>();
 
     //Test method
-    private void refresh() {
+    void refresh() {
         Set<Player> players = new HashSet<>(Bukkit.getOnlinePlayers());
         for (Player p : players) {
             playerTime.put(p, p.getStatistic(Statistic.PLAY_ONE_MINUTE));
