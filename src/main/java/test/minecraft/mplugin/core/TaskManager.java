@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class TaskManager {
-    private Map<String, Runnable> task = new HashMap<>();
+    private final Map<String, Runnable> task = new HashMap<>();
 
     private TaskManager() {
         PlayTimeManager playTime = PlayTimeManager.getInstance();

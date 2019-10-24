@@ -23,8 +23,8 @@ public class PlayTimeManager {
         return LazyHolder.INSTANCE;
     }
 
-    private Map<Player, Integer> playerTime = new HashMap<>();
-    private Map<Player, Integer> joinTime = new HashMap<>();
+    private final Map<Player, Integer> playerTime = new HashMap<>();
+    private final Map<Player, Integer> joinTime = new HashMap<>();
 
     //Test method
     void refresh() {
