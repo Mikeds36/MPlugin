@@ -27,9 +27,7 @@ class Init {
     final private int defaultSecond = 60;
 
     private Location center = new Location(null, defaultXpos, defaultYpos, defaultZpos);
-    private World w;
     private WorldBorder wb;
-    //this.wb = w.getWorldBorder();
 
     private int wbSize = defaultSize;
     private int wbSecond = defaultSecond;
@@ -41,6 +39,7 @@ class Init {
     // Setter
     void setWorld(World world) {
         center.setWorld(world);
+        this.wb = world.getWorldBorder();
     }
 
     void setCoord(double xpos, double ypos, double zpos) {
@@ -68,6 +67,7 @@ class Init {
 
         pes.add(pe);
         pes.add(pe1);
+
         Title[] title = new TitleMaker().makeCountdown(3);
 
         for (Player pl : plugin.getServer().getOnlinePlayers()) {
