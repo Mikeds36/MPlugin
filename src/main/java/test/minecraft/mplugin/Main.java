@@ -9,6 +9,7 @@ import test.minecraft.mplugin.commands.HelloCmd;
 import test.minecraft.mplugin.commands.notify.NotifyCmd;
 import test.minecraft.mplugin.core.GameEventListener;
 import test.minecraft.mplugin.core.PlayTimeManager;
+import test.minecraft.mplugin.core.ConstructTabCompleter;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -31,6 +32,7 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new GameEventListener.PlayerJoin(this), this);
         Objects.requireNonNull(getCommand("hello")).setExecutor(new HelloCmd(this));
         Objects.requireNonNull(getCommand("gm")).setExecutor(new GamemodeCmd(this));
+        Objects.requireNonNull(getCommand("gm")).setTabCompleter(new ConstructTabCompleter.Gamemode());
         Objects.requireNonNull(getCommand("notify")).setExecutor(new NotifyCmd(this));
         Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "Hello, World!");
     }
