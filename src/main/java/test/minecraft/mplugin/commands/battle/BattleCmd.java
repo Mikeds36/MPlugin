@@ -8,10 +8,12 @@ import org.bukkit.*;
 import org.bukkit.command.*;
 import test.minecraft.mplugin.core.TitleMaker;
 
+import java.text.ParseException;
+
 public class BattleCmd implements CommandExecutor {
     private final Main plugin;
 
-    private Init battleGame;
+    private Init battleGame = new Init();
 
     public BattleCmd(Main plugin) {
         this.plugin = plugin;
@@ -22,13 +24,27 @@ public class BattleCmd implements CommandExecutor {
         String CommandIdentifier = args[0];
 
         Player p = (Player) sender;
+        battleGame.setWorld(p.getWorld());
 
         if (CommandIdentifier.equalsIgnoreCase("Init")) {
             String detailCmd = args[1];
             if (detailCmd.equalsIgnoreCase("setlo")) {
+                if (args.length != 6) {
+                    return false;
+                }
+
+                try {
+                    int xpos = Integer.parseInt(args[2]);
+                    int ypos = Integer.parseInt(args[3]);
+                    int zpos = Integer.parseInt(args[4]);
+
+                    battleGame.setCoord(xpos, ypos, zpos);
+                } catch (NumberFormatException e) {
+                    return false;
+                }
                 //Todo: Get Coordinate
             } else {
-                battleGame = new Init(p.getWorld());
+
             }
 
             //Todo: Init Something

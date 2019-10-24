@@ -5,7 +5,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import test.minecraft.mplugin.Main;
@@ -33,27 +32,31 @@ class Init {
 
     private ArrayList<Player> playerList;
 
-    Init(World world) {
+    Init() {
+    }
+
+    // Setter
+    void setWorld(World world) {
         center.setWorld(world);
     }
 
-    Init(int xpos, int ypos, int zpos) {
+    void setCoord(int xpos, int ypos, int zpos) {
         center.setX(xpos);
         center.setY(ypos);
         center.setZ(zpos);
     }
 
-    Init(int size, int sec) {
+    void setSizeWSec(int size, int sec) {
         this.wbSize = size;
         this.wbSecond = sec;
     }
 
-    public boolean Join(Player p) {
+    // Method
+    void Join(Player p) {
         this.playerList.add(p);
-        return true;
     }
 
-    public boolean Start(CommandSender s) {
+    void Start(CommandSender s) {
         Player p = (Player) s;
 
         if (!playerList.contains(p)) {
@@ -77,6 +80,5 @@ class Init {
         wb.setCenter(center);
         wb.setSize(wbSize);
         wb.setSize(0, wbSecond);
-        return true;
     }
 }
