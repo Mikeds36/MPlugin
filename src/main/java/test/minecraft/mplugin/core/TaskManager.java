@@ -1,6 +1,7 @@
 package test.minecraft.mplugin.core;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -17,7 +18,7 @@ public class TaskManager {
         this.set("notifyAll", () -> {
             Set<Player> players = new HashSet<>(Bukkit.getOnlinePlayers());
             for (Player p : players) {
-                p.sendMessage(playTime.print(p));
+                p.sendMessage(ChatColor.GREEN + playTime.print(p));
             }
         });
 

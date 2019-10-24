@@ -43,7 +43,7 @@ public class NotifyCmd implements CommandExecutor {
 
             TaskManager taskMgr = TaskManager.getInstance();
             taskMgr.get("notifyAll").run();
-            return false;
+            return true;
         }
     }
 }
