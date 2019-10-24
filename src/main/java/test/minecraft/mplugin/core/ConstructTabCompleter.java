@@ -23,8 +23,10 @@ public class ConstructTabCompleter {
             }
 
             switch (args.length) {
+                // 첫 번째 인자 자동완성
                 case 1:
                     return Arrays.asList("0", "1", "2", "3");
+                // 두 번째 인자 자동완성
                 case 2:
                     Set<Player> players = new HashSet<>(Bukkit.getOnlinePlayers());
                     List<String> list = new ArrayList<>(Collections.singletonList("@a"));
@@ -33,6 +35,7 @@ public class ConstructTabCompleter {
                         list.add(p.getName());
                     }
 
+                    //대소문자 구별없이 정렬
                     list.sort(String::compareToIgnoreCase);
                     return list;
             }

@@ -18,6 +18,7 @@ public class HelloCmd implements CommandExecutor {
         }
         String motd = plugin.getServer().getMotd();
 
+        //Hello World 출력
         sender.sendMessage(ChatColor.GREEN + "Hello, World!\n" + motd);
         return true;
     }
