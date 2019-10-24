@@ -16,12 +16,14 @@ public class TaskManager {
         PlayTimeManager playTime = PlayTimeManager.getInstance();
 
         this.set("notifyAll", () -> {
+            //모든 플레이어에게 각각의 플레이 시간 출력
             Set<Player> players = new HashSet<>(Bukkit.getOnlinePlayers());
             for (Player p : players) {
                 p.sendMessage(ChatColor.GREEN + playTime.print(p));
             }
         });
 
+        //스케줄에 의해 자동 실행
         this.set("notify_refresh", playTime::refresh);
     }
 

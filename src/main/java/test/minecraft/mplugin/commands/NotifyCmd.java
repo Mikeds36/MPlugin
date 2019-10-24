@@ -1,4 +1,4 @@
-package test.minecraft.mplugin.commands.notify;
+package test.minecraft.mplugin.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -19,12 +19,14 @@ public class NotifyCmd implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+        //notify : 인자 필요 X
         if (args.length > 1) {
             return false;
         }
 
         Player self = (Player) sender;
         PlayTimeManager playTime = PlayTimeManager.getInstance();
+        //명령어를 실행한 사용자에게 플레이 시간 출력
         sender.sendMessage(ChatColor.GREEN + playTime.print(self));
         return true;
     }
@@ -41,6 +43,7 @@ public class NotifyCmd implements CommandExecutor {
                 return true;
             }
 
+            //모든 유저에게 플레이 시간 출력
             TaskManager taskMgr = TaskManager.getInstance();
             taskMgr.get("notifyAll").run();
             return true;
