@@ -24,7 +24,16 @@ public class NotifyCmd implements CommandExecutor {
             return false;
         }
 
-        Player self = (Player) sender;
+        Player self;
+        //플레이어 체크
+        if (sender instanceof Player) {
+            self = (Player) sender;
+        }
+        else {
+            sender.sendMessage(ChatColor.RED + "Error: 이 명령어는 플레이어만 사용할 수 있습니다.");
+            return true;
+        }
+
         PlayTimeManager playTime = PlayTimeManager.getInstance();
         //명령어를 실행한 사용자에게 플레이 시간 출력
         sender.sendMessage(ChatColor.GREEN + playTime.print(self));
