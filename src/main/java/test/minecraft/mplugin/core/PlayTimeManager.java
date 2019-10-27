@@ -26,7 +26,6 @@ public class PlayTimeManager {
     private final Map<Player, Integer> playerTime = new HashMap<>();
     private final Map<Player, Integer> joinTime = new HashMap<>();
 
-    //Test method
     void refresh() {
         //모든 플레이어의 플레이 시간을 가져와서 HashMap에 Player, Integer(key-value) 형태로 저장
         Set<Player> players = new HashSet<>(Bukkit.getOnlinePlayers());
@@ -61,7 +60,7 @@ public class PlayTimeManager {
     }
 
     //Test method
-    public String print(Player p) {
+    public String print(@NotNull Player p) {
         int[] time = this.getPlayTime(p);
         //print PlayTime of sender
         return "현재까지 플레이한 시간 : " + time[0] + "시간 " + time[1] + "분 " + time[2] + "초";
