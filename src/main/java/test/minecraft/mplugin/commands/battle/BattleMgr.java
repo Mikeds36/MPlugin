@@ -114,7 +114,7 @@ class BattleMgr {
             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                 bb.setTitle(bbs);
                 bb.setProgress((double) finalI / wbSecond);
-            }, i * 20);
+            }, (wbSecond - i) * 20);
         }
 
         // WorldBorder Setting
