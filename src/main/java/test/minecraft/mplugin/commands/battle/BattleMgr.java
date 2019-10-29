@@ -29,13 +29,16 @@ class BattleMgr {
     final private int defaultSize = 60;
     final private int defaultSecond = 100;
 
+    private int wbSize = defaultSize;
+    private int wbSecond = defaultSecond;
+
     private Location gotoP = new Location(null, -90, 20, -45);
     private Location center = new Location(null, defaultXpos, defaultYpos, defaultZpos);
     private WorldBorder wb;
     private BossBar bb;
 
-    private int wbSize = defaultSize;
-    private int wbSecond = defaultSecond;
+    private ItemStack is = new ItemStack(Material.STICK, 1);
+    private Collection<PotionEffect> pes = new ArrayList<>();
 
     BattleMgr(Main p) {
         this.plugin = p;
@@ -60,9 +63,7 @@ class BattleMgr {
 
     // Method
     void Start(@NotNull Player p) {
-        ItemStack is = new ItemStack(Material.STICK, 1);
         ItemMeta im = is.getItemMeta();
-        Collection<PotionEffect> pes = new ArrayList<>();
         PotionEffect pe = new PotionEffect(PotionEffectType.HEAL, 2, 127, false, false, true);
         PotionEffect pe1 = new PotionEffect(PotionEffectType.SATURATION, 2, 127, false, false, true);
         bb = p.getServer().createBossBar(Color.BLUE + "Battle!", BarColor.BLUE, BarStyle.SOLID);
@@ -96,15 +97,7 @@ class BattleMgr {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> pl.playSound(l, s, 1, 1), delay);
                 Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> pl.sendTitle(t), delay);
             }
-
-            // user setting
-            pl.teleport(center);
-            pl.getInventory().clear();
-            pl.setGameMode(GameMode.ADVENTURE);
-            pl.getInventory().setItemInMainHand(is);
-            pl.addPotionEffects(pes);
-            pl.playSound(l, Sound.MUSIC_DISC_WARD, 1, 1);
-            bb.addPlayer(pl);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> delayedGame(pl, l), 3 * 20);
         }
 
         // Tasks For Bossbar
@@ -114,16 +107,29 @@ class BattleMgr {
             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                 bb.setTitle(bbs);
                 bb.setProgress((double) finalI / wbSecond);
-            }, (wbSecond - i) * 20);
+            }, (wbSecond - i) * 20 + 60);
         }
 
         // WorldBorder Setting
         wb.setCenter(center);
         wb.setSize(wbSize);
         wb.setSize(0, wbSecond);
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, this::End, wbSecond * 20 + 60);
     }
 
-    void End() {
+    private void delayedGame(Player pl, Location l) {
+        // user setting
+        pl.teleport(center);
+        pl.getInventory().clear();
+        pl.setGameMode(GameMode.ADVENTURE);
+        pl.getInventory().setItemInMainHand(is);
+        pl.addPotionEffects(pes);
+        pl.playSound(l, Sound.MUSIC_DISC_WARD, 1, 1);
+        bb.addPlayer(pl);
+    }
+
+    private void End() {
         gotoP.setWorld(center.getWorld());
 
         for (Player p : plugin.getServer().getOnlinePlayers()) {
