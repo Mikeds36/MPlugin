@@ -23,3 +23,12 @@ commands:
     usage: |
       /<command>
       Example: /battle init
+  notify:
+    description: 게임 플레이 시간을 알려줍니다.
+    usage: |
+      /<command> - Toggle
+      /<command> [on/off] - notify 기능 on/off
+  notifyall:
+    description: 게임 플레이 시간을 전체에게 알려줍니다.
+    usage: |
+      /<command> - 게임 플레이 시간을 전체에게 알립니다. (OP 전용)
