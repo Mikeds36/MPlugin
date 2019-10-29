@@ -15,7 +15,7 @@ public class TitleMaker {
 
         for (int i = 0; i < count; i++) {
             message[i] = new TextComponent(Integer.toString(count - i));
-            message[i].setColor(ChatColor.RED);
+            message[i].setColor(ChatColor.WHITE);
             message[i].setBold(true);
             title[i] = new Title(message[i], new TextComponent(), 0, 20, 0);
         }
