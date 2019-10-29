@@ -27,7 +27,7 @@ class BattleMgr {
     final private int defaultYpos = 34;
     final private int defaultZpos = -18;
     final private int defaultSize = 60;
-    final private int defaultSecond = 60;
+    final private int defaultSecond = 100;
 
     private Location gotoP = new Location(null, -90, 20, -45);
     private Location center = new Location(null, defaultXpos, defaultYpos, defaultZpos);
@@ -79,6 +79,8 @@ class BattleMgr {
         // Make Title with TitleMaker
         Title[] title = new TitleMaker().makeCountdown(3);
 
+        bb.setVisible(true);
+
         // if center's World is null get player's world
         if (center.getWorld() == null) {
             center.setWorld(p.getWorld());
@@ -102,9 +104,8 @@ class BattleMgr {
             pl.getInventory().setItemInMainHand(is);
             pl.addPotionEffects(pes);
             pl.playSound(l, Sound.MUSIC_DISC_WARD, 1, 1);
+            bb.addPlayer(pl);
         }
-
-        bb.setVisible(true);
 
         // Tasks For Bossbar
         for (int i = wbSecond; i > 0; i--) {
@@ -112,7 +113,7 @@ class BattleMgr {
             int finalI = i;
             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                 bb.setTitle(bbs);
-                bb.setProgress(finalI);
+                bb.setProgress((double) finalI / wbSecond);
             }, i * 20);
         }
 
