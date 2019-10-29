@@ -69,7 +69,7 @@ class BattleMgr {
 
         // Add ItemMeta in ItemStack
         im.addEnchant(Enchantment.KNOCKBACK, 1, true);
-        im.setDisplayName("펀치-");
+        im.setDisplayName("이야야야야야");
         is.setItemMeta(im);
 
         // Added Each PotionEffect to PotionEffect Collection
