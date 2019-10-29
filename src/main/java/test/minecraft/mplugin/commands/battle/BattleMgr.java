@@ -2,7 +2,9 @@ package test.minecraft.mplugin.commands.battle;
 
 import com.destroystokyo.paper.Title;
 import org.bukkit.*;
-import org.bukkit.command.CommandSender;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -10,13 +12,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 import test.minecraft.mplugin.Main;
 import test.minecraft.mplugin.core.TitleMaker;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-class Init {
+class BattleMgr {
     private Main plugin;
 
     //Location: -99, 34, -18
@@ -26,13 +29,15 @@ class Init {
     final private int defaultSize = 60;
     final private int defaultSecond = 60;
 
+    private Location gotoP = new Location(null, -90, 20, -45);
     private Location center = new Location(null, defaultXpos, defaultYpos, defaultZpos);
     private WorldBorder wb;
+    private BossBar bb;
 
     private int wbSize = defaultSize;
     private int wbSecond = defaultSecond;
 
-    Init(Main p) {
+    BattleMgr(Main p) {
         this.plugin = p;
     }
 
@@ -54,22 +59,32 @@ class Init {
     }
 
     // Method
-    void Start(Player p) {
+    void Start(@NotNull Player p) {
         ItemStack is = new ItemStack(Material.STICK, 1);
         ItemMeta im = is.getItemMeta();
         Collection<PotionEffect> pes = new ArrayList<>();
         PotionEffect pe = new PotionEffect(PotionEffectType.HEAL, 2, 127, false, false, true);
         PotionEffect pe1 = new PotionEffect(PotionEffectType.SATURATION, 2, 127, false, false, true);
+        bb = p.getServer().createBossBar(Color.BLUE + "Battle!", BarColor.BLUE, BarStyle.SOLID);
 
+        // Add ItemMeta in ItemStack
         im.addEnchant(Enchantment.KNOCKBACK, 1, true);
         im.setDisplayName("이야야야야야");
         is.setItemMeta(im);
 
+        // Added Each PotionEffect to PotionEffect Collection
         pes.add(pe);
         pes.add(pe1);
 
+        // Make Title with TitleMaker
         Title[] title = new TitleMaker().makeCountdown(3);
 
+        // if center's World is null get player's world
+        if (center.getWorld() == null) {
+            center.setWorld(p.getWorld());
+        }
+
+        // Tasks for Each players
         for (Player pl : plugin.getServer().getOnlinePlayers()) {
             Location l = pl.getLocation();
             for (int i = 0; i < title.length; i++) {
@@ -87,15 +102,36 @@ class Init {
             pl.getInventory().setItemInMainHand(is);
             pl.addPotionEffects(pes);
             pl.playSound(l, Sound.MUSIC_DISC_WARD, 1, 1);
-            // TODO: Add bossbar
         }
 
-        if (center.getWorld() == null) {
-            center.setWorld(p.getWorld());
+        bb.setVisible(true);
+
+        // Tasks For Bossbar
+        for (int i = wbSecond; i > 0; i--) {
+            String bbs = Color.BLUE + "남은 시간 : " + i;
+            int finalI = i;
+            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                bb.setTitle(bbs);
+                bb.setProgress(finalI);
+            }, i * 20);
         }
+
         // WorldBorder Setting
         wb.setCenter(center);
         wb.setSize(wbSize);
         wb.setSize(0, wbSecond);
+    }
+
+    void End() {
+        gotoP.setWorld(center.getWorld());
+
+        for (Player p : plugin.getServer().getOnlinePlayers()) {
+            p.teleport(gotoP);
+            p.setGameMode(GameMode.CREATIVE);
+        }
+
+        bb.setVisible(false);
+
+        wb.setSize(600000);
     }
 }

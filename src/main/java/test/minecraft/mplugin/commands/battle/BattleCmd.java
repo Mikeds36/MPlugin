@@ -1,23 +1,19 @@
 package test.minecraft.mplugin.commands.battle;
 
-import com.destroystokyo.paper.Title;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import test.minecraft.mplugin.Main;
 import org.bukkit.*;
 import org.bukkit.command.*;
-import test.minecraft.mplugin.core.TitleMaker;
-
-import java.text.ParseException;
 
 public class BattleCmd implements CommandExecutor {
     private final Main plugin;
 
-    private Init battleGame;
+    private BattleMgr battleGame;
 
     public BattleCmd(Main plugin) {
         this.plugin = plugin;
-        this.battleGame = new Init(plugin);
+        this.battleGame = new BattleMgr(plugin);
     }
 
     @Override
@@ -25,6 +21,12 @@ public class BattleCmd implements CommandExecutor {
         String CommandIdentifier = args[0];
 
         Player p = (Player) sender;
+
+        // Check player on Normal world
+        if (p.getWorld().getEnvironment() != World.Environment.NORMAL) {
+            return false;
+        }
+
         battleGame.setWorld(p.getWorld());
 
         if (CommandIdentifier.equalsIgnoreCase("Init")) {
