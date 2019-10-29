@@ -108,11 +108,11 @@ class BattleMgr {
         }
 
         // Tasks For Bossbar
-        for (int i = 0; i <= wbSecond; i++) {
-            String bbs = "남은 시간 : " + i;
+        for (int i = wbSecond; i > 0; i--) {
+            String bbs = Color.BLUE + "남은 시간 : " + i;
             int finalI = i;
             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-                bb.setTitle(Color.BLUE + bbs);
+                bb.setTitle(bbs);
                 bb.setProgress((double) finalI / wbSecond);
             }, i * 20);
         }
