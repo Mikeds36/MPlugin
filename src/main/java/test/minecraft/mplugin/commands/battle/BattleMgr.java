@@ -7,7 +7,9 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
@@ -20,34 +22,35 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 class BattleMgr {
-    private Main plugin;
+    private static Main plugin;
 
     //Location: -99, 34, -18
-    final private int defaultXpos = -99;
-    final private int defaultYpos = 34;
-    final private int defaultZpos = -18;
+    static final private int defaultXpos = -99;
+    static final private int defaultYpos = 34;
+    static final private int defaultZpos = -18;
     final private int defaultSize = 60;
     final private int defaultSecond = 100;
 
     private int wbSize = defaultSize;
     private int wbSecond = defaultSecond;
 
-    private Location gotoP = new Location(null, -90, 20, -45);
-    private Location center = new Location(null, defaultXpos, defaultYpos, defaultZpos);
-    private WorldBorder wb;
-    private BossBar bb;
+    private static Location gotoP = new Location(null, -90, 20, -45);
+    private static Location center = new Location(null, defaultXpos, defaultYpos, defaultZpos);
+    private static WorldBorder wb;
+    private static BossBar bb;
 
+    private static ArrayList<Player> playerCollection = new ArrayList<>();
     private ItemStack is = new ItemStack(Material.STICK, 1);
     private Collection<PotionEffect> pes = new ArrayList<>();
 
     BattleMgr(Main p) {
-        this.plugin = p;
+        plugin = p;
     }
 
     // Setter
     void setWorld(World world) {
         center.setWorld(world);
-        this.wb = world.getWorldBorder();
+        wb = world.getWorldBorder();
     }
 
     void setCoord(double xpos, double ypos, double zpos) {
@@ -94,10 +97,13 @@ class BattleMgr {
                 Title t = title[i];
                 long delay = (20 * i);
                 Sound s = Sound.BLOCK_NOTE_BLOCK_PLING;
-                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> pl.playSound(l, s, 1, 1), delay);
-                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> pl.sendTitle(t), delay);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                    pl.playSound(l, s, 1, 1);
+                    pl.sendTitle(t);
+                }, delay);
             }
-            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> delayedGame(pl, l), 3 * 20);
+            delayedGame(pl, l);
+            addPlayerCollection(pl);
         }
 
         // Tasks For Bossbar
@@ -115,21 +121,23 @@ class BattleMgr {
         wb.setSize(wbSize);
         wb.setSize(0, wbSecond);
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, this::End, wbSecond * 20 + 60);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, BattleMgr::End, wbSecond * 20 + 60);
     }
 
     private void delayedGame(Player pl, Location l) {
-        // user setting
-        pl.teleport(center);
-        pl.getInventory().clear();
-        pl.setGameMode(GameMode.ADVENTURE);
-        pl.getInventory().setItemInMainHand(is);
-        pl.addPotionEffects(pes);
-        pl.playSound(l, Sound.MUSIC_DISC_WARD, 1, 1);
-        bb.addPlayer(pl);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+            // user setting
+            pl.teleport(center);
+            pl.getInventory().clear();
+            pl.setGameMode(GameMode.ADVENTURE);
+            pl.getInventory().setItemInMainHand(is);
+            pl.addPotionEffects(pes);
+            pl.playSound(l, Sound.MUSIC_DISC_WARD, 1, 1);
+            bb.addPlayer(pl);
+        }, 3 * 20);
     }
 
-    private void End() {
+    private static void End() {
         gotoP.setWorld(center.getWorld());
 
         for (Player p : plugin.getServer().getOnlinePlayers()) {
@@ -140,5 +148,30 @@ class BattleMgr {
         bb.setVisible(false);
 
         wb.setSize(600000);
+    }
+
+    private static void addPlayerCollection(Player p){
+        playerCollection.add(p);
+    }
+
+    private static void rmPlayerCollection(Player p){
+        playerCollection.remove(p);
+    }
+
+    private static boolean isPlayerAlone() {
+        return playerCollection.size() == 1;
+    }
+
+    static class onDeathEvent implements Listener {
+
+        @EventHandler
+        public void onDeath(PlayerDeathEvent event) {
+            Player p = event.getEntity();
+            p.setGameMode(GameMode.SPECTATOR);
+            rmPlayerCollection(p);
+            if (isPlayerAlone()) {
+                End();
+            }
+        }
     }
 }
