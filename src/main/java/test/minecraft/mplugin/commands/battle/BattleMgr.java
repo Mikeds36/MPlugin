@@ -12,14 +12,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import test.minecraft.mplugin.Main;
 import test.minecraft.mplugin.core.TitleMaker;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
 
 class BattleMgr {
     private Main plugin;
@@ -41,7 +45,6 @@ class BattleMgr {
 
     private ArrayList<Player> playerCollection = new ArrayList<>();
     private ItemStack is = new ItemStack(Material.STICK, 1);
-    private Collection<PotionEffect> pes = new ArrayList<>();
 
     BattleMgr(Main p) {
         this.plugin = p;
@@ -66,23 +69,10 @@ class BattleMgr {
 
     // Method
     void Start(@NotNull Player p) {
-        ItemMeta im = is.getItemMeta();
-        PotionEffect pe = new PotionEffect(PotionEffectType.HEAL, 2, 127, false, false, true);
-        PotionEffect pe1 = new PotionEffect(PotionEffectType.SATURATION, 2, 127, false, false, true);
-        bb = p.getServer().createBossBar(Color.BLUE + "Battle!", BarColor.BLUE, BarStyle.SOLID);
-
-        // Add ItemMeta in ItemStack
-        im.addEnchant(Enchantment.KNOCKBACK, 1, true);
-        im.setDisplayName("이야야야야야");
-        is.setItemMeta(im);
-
-        // Added Each PotionEffect to PotionEffect Collection
-        pes.add(pe);
-        pes.add(pe1);
-
         // Make Title with TitleMaker
         Title[] title = new TitleMaker().makeCountdown(3);
 
+        bb = p.getServer().createBossBar(Color.BLUE + "Battle!", BarColor.BLUE, BarStyle.SOLID);
         bb.setVisible(true);
 
         // if center's World is null get player's world
@@ -123,15 +113,51 @@ class BattleMgr {
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, this::End, wbSecond * 20 + 60);
     }
+    
+    private Collection<PotionEffect> fullHeal(){
+        Collection<PotionEffect> pAry = new ArrayList<>();
+        PotionEffect pe = new PotionEffect(PotionEffectType.HEAL, 2, 127, false, false, true);
+        PotionEffect pe1 = new PotionEffect(PotionEffectType.SATURATION, 2, 127, false, false, true);
+
+        pAry.add(pe);
+        pAry.add(pe1);
+
+        return pAry;
+    }
+
+    private ItemStack itemStackAddMeta(@NotNull final Material type, String name, Enchantment enchant, int lvl){
+        ItemStack rtn = new ItemStack(type, 1);
+        ItemMeta rtnIm = rtn.getItemMeta();
+
+        rtnIm.setDisplayName(name);
+        rtnIm.addEnchant(enchant, lvl, true);
+
+        return rtn;
+    }
+
+    private ItemStack itemStackAddMeta(@NotNull final Material type, String name, Map<Enchantment, Integer> enchant){
+        ItemStack rtn = new ItemStack(type, 1);
+        ItemMeta rtnIm = rtn.getItemMeta();
+
+        rtnIm.setDisplayName(name);
+
+        for (Enchantment e: enchant.keySet()){
+            rtnIm.addEnchant(e, enchant.get(e), true);
+        }
+
+        return rtn;
+    }
 
     private void delayedGame(Player pl, Location l) {
+        ItemStack knockStick = itemStackAddMeta(Material.STICK, "이야", Enchantment.KNOCKBACK, 1);
+
         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
             // user setting
             pl.teleport(center);
             pl.getInventory().clear();
             pl.setGameMode(GameMode.ADVENTURE);
-            pl.getInventory().setItemInMainHand(is);
-            pl.addPotionEffects(pes);
+            pl.getInventory().setItemInMainHand(knockStick);
+            pl.addPotionEffects(fullHeal());
             pl.playSound(l, Sound.MUSIC_DISC_WARD, 1, 1);
             bb.addPlayer(pl);
         }, 3 * 20);
@@ -163,7 +189,6 @@ class BattleMgr {
     }
 
     class onDeathEvent implements Listener {
-
         @EventHandler
         public void onDeath(PlayerDeathEvent event) {
             Player p = event.getEntity();
