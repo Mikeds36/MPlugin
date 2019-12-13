@@ -1,19 +1,19 @@
 package test.minecraft.mplugin.commands.battle;
 
+import org.bukkit.*;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import test.minecraft.mplugin.Main;
-import org.bukkit.*;
-import org.bukkit.command.*;
 
 public class BattleCmd implements CommandExecutor {
     private final Main plugin;
 
-    private BattleMgr battleGame;
+    private BattleMgrTst battleGame;
 
     public BattleCmd(Main plugin) {
         this.plugin = plugin;
-        this.battleGame = new BattleMgr(plugin);
+        this.battleGame = new BattleMgrTst(plugin);
     }
 
     @Override
@@ -22,7 +22,7 @@ public class BattleCmd implements CommandExecutor {
         try {
             CommandIdentifier = args[0];
         } catch (ArrayIndexOutOfBoundsException e) {
-            CommandIdentifier = "t";
+            return false;
         }
 
         Player p = (Player) sender;
@@ -35,38 +35,21 @@ public class BattleCmd implements CommandExecutor {
         battleGame.setWorld(p.getWorld());
 
         if (CommandIdentifier.equalsIgnoreCase("Init")) {
-            String detailCmd = args[1];
-            if (detailCmd.equalsIgnoreCase("setlo")) {
-                if (args.length != 6) {
+            try {
+                initCmd(p, args);
+            } catch (Exception e) {
+                if (e.getCause() instanceof ArrayIndexOutOfBoundsException) {
+                    return false;
+                } else if (e.getCause() instanceof NumberFormatException) {
+                    sender.sendMessage(ChatColor.RED + "Number argument must be ~ or number");
+                    return false;
+                } else if (e.getCause() instanceof IllegalArgumentException) {
+                    sender.sendMessage(ChatColor.RED + "Too few or many argument!");
+                    return false;
+                } else {
                     return false;
                 }
-
-                try {
-                    double xpos, ypos, zpos;
-
-                    xpos = args[2].equals("~") ? p.getLocation().getX() : Integer.parseInt(args[2]);
-                    ypos = args[3].equals("~") ? p.getLocation().getY() : Integer.parseInt(args[3]);
-                    zpos = args[4].equals("~") ? p.getLocation().getZ() : Integer.parseInt(args[4]);
-
-                    battleGame.setCoord(xpos, ypos, zpos);
-                } catch (NumberFormatException e) {
-                    sender.sendMessage(Color.RED + "Coordinate must be ~ or number");
-                    return false;
-                }
-                //Todo: Get Coordinate
-            } else if (detailCmd.equalsIgnoreCase("setwb")) {
-                try {
-                    int size = Integer.parseInt(args[2]);
-                    int sec = Integer.parseInt(args[3]);
-                    battleGame.setSizeWSec(size, sec);
-                } catch (NumberFormatException e) {
-                    sender.sendMessage(Color.RED + "Size and Second must be number");
-                }
-            } else {
-                return false;
             }
-
-            //Todo: Init Something
         } else if (CommandIdentifier.equalsIgnoreCase("Team")) {
             //Todo: Create Team, join team
         } else if (CommandIdentifier.equalsIgnoreCase("Abli")) {
@@ -76,11 +59,36 @@ public class BattleCmd implements CommandExecutor {
             battleGame.Start(p);
 
             //Todo: Get each team And tp each Team's player
+        } else if (CommandIdentifier.equalsIgnoreCase("End")) {
+            battleGame.End();
         } else {
             //Todo return false;
             return false;
         }
 
         return true;
+    }
+
+    void initCmd(@NotNull Player p, @NotNull String[] args) throws Exception {
+        String detailCmd = args[1];
+        if (detailCmd.equalsIgnoreCase("setlo")) {
+            if (args.length != 6)
+                throw new IllegalArgumentException();
+
+            double xpos, ypos, zpos;
+
+            xpos = args[2].equals("~") ? p.getLocation().getX() : Integer.parseInt(args[2]);
+            ypos = args[3].equals("~") ? p.getLocation().getY() : Integer.parseInt(args[3]);
+            zpos = args[4].equals("~") ? p.getLocation().getZ() : Integer.parseInt(args[4]);
+
+            battleGame.setCoord(xpos, ypos, zpos);
+            //Todo: Get Coordinate
+        } else if (detailCmd.equalsIgnoreCase("setwb")) {
+            int size = Integer.parseInt(args[2]);
+            int sec = Integer.parseInt(args[3]);
+            battleGame.setWbSizeSec(size, sec);
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 }

@@ -12,18 +12,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import test.minecraft.mplugin.Main;
 import test.minecraft.mplugin.core.TitleMaker;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Map;
 
 class BattleMgr {
     private Main plugin;
@@ -125,31 +121,14 @@ class BattleMgr {
         return pAry;
     }
 
-    private ItemStack itemStackAddMeta(@NotNull final Material type, String name, Enchantment enchant, int lvl){
-        ItemStack rtn = new ItemStack(type, 1);
-        ItemMeta rtnIm = rtn.getItemMeta();
-
-        rtnIm.setDisplayName(name);
-        rtnIm.addEnchant(enchant, lvl, true);
-
-        return rtn;
-    }
-
-    private ItemStack itemStackAddMeta(@NotNull final Material type, String name, Map<Enchantment, Integer> enchant){
-        ItemStack rtn = new ItemStack(type, 1);
-        ItemMeta rtnIm = rtn.getItemMeta();
-
-        rtnIm.setDisplayName(name);
-
-        for (Enchantment e: enchant.keySet()){
-            rtnIm.addEnchant(e, enchant.get(e), true);
-        }
-
-        return rtn;
-    }
-
     private void delayedGame(Player pl, Location l) {
-        ItemStack knockStick = itemStackAddMeta(Material.STICK, "이야", Enchantment.KNOCKBACK, 1);
+        ItemStack knockStick = new ItemStack(Material.STICK, 1);
+        ItemMeta rtnIm = knockStick.getItemMeta();
+
+        rtnIm.setDisplayName("hey");
+        rtnIm.addEnchant(Enchantment.KNOCKBACK, 1, true);
+
+        knockStick.setItemMeta(rtnIm);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
             // user setting
@@ -163,7 +142,7 @@ class BattleMgr {
         }, 3 * 20);
     }
 
-    private void End() {
+    void End() {
         gotoP.setWorld(center.getWorld());
 
         for (Player p : plugin.getServer().getOnlinePlayers()) {
