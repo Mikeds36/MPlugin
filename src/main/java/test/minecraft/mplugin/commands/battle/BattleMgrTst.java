@@ -62,6 +62,7 @@ class BattleMgrTst {
     }
 
     void setWorld(World world) {
+        gotoP.setWorld(world);
         center.setWorld(world);
         this.worldBorder = world.getWorldBorder();
     }
@@ -85,17 +86,24 @@ class BattleMgrTst {
         return this.bossBar;
     }
 
+    WorldBorder getWorldBorder() {
+        return this.worldBorder;
+    }
+
+    int getWbSecond() {
+        return this.wbSecond;
+    }
+
+    int getWbSize() {
+        return this.wbSize;
+    }
+
     void Start(Player p) {
-        World pWorld = p.getWorld();
-        gotoP.setWorld(pWorld);
-        center.setWorld(pWorld);
         bossBar = p.getServer().createBossBar(Color.BLUE + "Battle!", BarColor.BLUE, BarStyle.SOLID);
         bossBar.setVisible(true);
 
-        playerTask pt = new playerTask(plugin);
+        playerTask pt = new playerTask(plugin, this);
         pt.run();
-        serverTask st = new serverTask(plugin);
-        st.run();
     }
 
     void End() {
@@ -109,34 +117,6 @@ class BattleMgrTst {
         bossBar.setVisible(false);
 
         worldBorder.setSize(600000);
-    }
-
-    class serverTask extends BukkitRunnable {
-        private final Main plugin;
-        private final Long TICK = 20L;
-
-        serverTask(Main plugin) {
-            this.plugin = plugin;
-        }
-
-        @Override
-        public void run() {
-            for (int i = wbSecond; i > 0; i--) {
-                String bbs = ChatColor.BLUE + "남은 시간 : " + i;
-                int finalI = i;
-                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-                    bossBar.setTitle(bbs);
-                    bossBar.setProgress((double) finalI / wbSecond);
-                }, (wbSecond - i) * TICK);
-            }
-
-            // WorldBorder Setting
-            worldBorder.setCenter(center);
-            worldBorder.setSize(wbSize);
-            worldBorder.setSize(0, wbSecond);
-
-            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, BattleMgrTst.this::End, wbSecond * TICK);
-        }
     }
 
     class onDeathEvent implements Listener {

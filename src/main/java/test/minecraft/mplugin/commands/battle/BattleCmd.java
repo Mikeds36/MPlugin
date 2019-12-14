@@ -72,7 +72,7 @@ public class BattleCmd implements CommandExecutor {
     void initCmd(@NotNull Player p, @NotNull String[] args) throws Exception {
         String detailCmd = args[1];
         if (detailCmd.equalsIgnoreCase("setlo")) {
-            if (args.length != 6)
+            if (args.length != 5)
                 throw new IllegalArgumentException();
 
             double xpos, ypos, zpos;
