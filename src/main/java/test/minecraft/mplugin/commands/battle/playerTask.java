@@ -5,6 +5,7 @@ import org.bukkit.*;
 import org.bukkit.boss.BossBar;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
@@ -14,19 +15,13 @@ import org.bukkit.scheduler.BukkitScheduler;
 import test.minecraft.mplugin.Main;
 import test.minecraft.mplugin.core.TitleMaker;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 class playerTask extends BukkitRunnable {
     private final Main plugin;
     private final BattleMgrTst battleMgrTst;
 
     private Title[] title;
-    private ItemStack knockStick;
-    private ItemMeta ksIm;
-    private String ksDisname;
     private HashSet<ItemStack> items;
 
     private BossBar bossBar;
@@ -35,9 +30,6 @@ class playerTask extends BukkitRunnable {
         this.plugin = plugin;
         this.battleMgrTst = bt;
         this.title = new TitleMaker().makeCountdown(3);
-        this.knockStick = new ItemStack(Material.STICK, 1);
-        this.ksIm = knockStick.getItemMeta();
-        this.ksDisname = "";
         this.items = new HashSet<>();
         this.bossBar = battleMgrTst.getBossBar();
     }
@@ -60,29 +52,45 @@ class playerTask extends BukkitRunnable {
         scheduler.scheduleSyncDelayedTask(plugin, // Tasks for Each players
                 // user setting
                 () -> {
+                    Map<ItemStack, ItemMeta> iMap = new HashMap<>();
+
+                    ItemStack knockStick = new ItemStack(Material.STICK, 1);
+                    ItemStack torch = new ItemStack(Material.TORCH, 1);
+                    ItemMeta ksIm = knockStick.getItemMeta();
+                    ItemMeta trIm = torch.getItemMeta();
+
                     long delay = 0;
 
-                    ksIm.setDisplayName(ksDisname);
                     ksIm.addEnchant(Enchantment.KNOCKBACK, 1, true);
-                    knockStick.setItemMeta(ksIm);
+                    trIm.addEnchant(Enchantment.KNOCKBACK, 0, true);
 
-                    items.add(knockStick);
+                    iMap.put(knockStick, ksIm);
+                    iMap.put(torch, trIm);
+
+                    addItem(iMap);
+
+//                    items.add(knockStick);
 
                     // Tasks for Each players
                     for (Player pl : plugin.getServer().getOnlinePlayers()) {
                         Location locate = pl.getLocation();
+
+                        battleMgrTst.addPlayerCollection(pl);
+
+                        // Send title to player
                         for (int i = 0; i < title.length; i++) {
                             Title t = title[i];
                             delay = (20 * i);
+                            Location plLocation = pl.getLocation();
 
                             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-                                pl.playSound(locate, Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
+                                pl.playSound(plLocation, Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
                                 pl.sendTitle(t);
                             }, delay);
                         }
 
+                        // Settings for player
                         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-                            // user setting
                             pl.teleport(battleMgrTst.getCenter());
                             pl.getInventory().clear();
                             pl.setGameMode(GameMode.ADVENTURE);
@@ -90,7 +98,7 @@ class playerTask extends BukkitRunnable {
                                 pl.getInventory().addItem(is);
                             }
                             fullHeal(pl);
-                            pl.playSound(locate, Sound.MUSIC_DISC_WARD, 1, 1);
+                            pl.playSound(battleMgrTst.getCenter(), Sound.MUSIC_DISC_WARD, 1, 1);
                             bossBar.addPlayer(pl);
                         }, delay += 20);
                     }

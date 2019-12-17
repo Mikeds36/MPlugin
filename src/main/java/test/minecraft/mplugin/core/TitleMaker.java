@@ -3,6 +3,7 @@ package test.minecraft.mplugin.core;
 import com.destroystokyo.paper.Title;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.entity.Player;
 
 public class TitleMaker {
     public TitleMaker() {
@@ -21,5 +22,15 @@ public class TitleMaker {
         }
 
         return title;
+    }
+
+    public Title showWinner(Player p) {
+        TextComponent message;
+
+        message = new TextComponent(p.getDisplayName() + " Win!");
+        message.setColor(ChatColor.AQUA);
+        message.setBold(true);
+
+        return new Title(message, new TextComponent(), 5, 60, 5);
     }
 }
