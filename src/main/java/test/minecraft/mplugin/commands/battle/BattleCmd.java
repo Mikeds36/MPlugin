@@ -38,12 +38,12 @@ public class BattleCmd implements CommandExecutor {
             try {
                 initCmd(p, args);
             } catch (Exception e) {
-                if (e.getCause() instanceof ArrayIndexOutOfBoundsException) {
+                if (e instanceof ArrayIndexOutOfBoundsException) {
                     return false;
-                } else if (e.getCause() instanceof NumberFormatException) {
+                } else if (e instanceof NumberFormatException) {
                     sender.sendMessage(ChatColor.RED + "Number argument must be ~ or number");
                     return false;
-                } else if (e.getCause() instanceof IllegalArgumentException) {
+                } else if (e instanceof IllegalArgumentException) {
                     sender.sendMessage(ChatColor.RED + "Too few or many argument!");
                     return false;
                 } else {
